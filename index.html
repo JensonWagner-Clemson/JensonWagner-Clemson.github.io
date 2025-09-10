@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenson Wagner | Computer Science Student</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide-react@latest/dist/lucide-react.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- Custom Styles & Tailwind Config -->
+    <style>
+        /* Basic scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827; /* dark:bg-gray-900 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151; /* dark:bg-gray-700 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563; /* dark:bg-gray-600 */
+        }
+
+        /* Smooth scrolling behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom animation for elements fading in on scroll */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#2563eb', // Blue-600
+                        'primary-hover': '#1d4ed8', // Blue-700
+                        'dark-bg': '#0f172a', // Slate-900
+                        'dark-card': '#1e293b', // Slate-800
+                        'dark-text': '#e2e8f0', // Slate-200
+                        'light-bg': '#f1f5f9', // Slate-100
+                        'light-card': '#ffffff', // White
+                        'light-text': '#0f172a', // Slate-900
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text font-sans antialiased transition-colors duration-300">
+
+<!-- === HEADER & TASKBAR === -->
+<header class="fixed top-0 left-0 right-0 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-sm z-50 border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo / Name -->
+            <div class="flex-shrink-0">
+                <a href="#" class="text-xl font-bold tracking-tight">Jenson Wagner</a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">About</a>
+                <a href="#projects" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Projects</a>
+                <a href="#experience" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Experience</a>
+                <a href="#contact" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Contact</a>
+            </nav>
+
+            <!-- Widgets: Clock & Theme Toggle -->
+            <div class="flex items-center space-x-4">
+                <div id="clock" class="text-sm font-mono hidden sm:block text-gray-500 dark:text-gray-400"></div>
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+                    <svg id="theme-icon-light" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="theme-icon-dark" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-menu" class="md:hidden hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">About</a>
+            <a href="#projects" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">Projects</a>
+            <a href="#experience" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">Experience</a>
+            <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">Contact</a>
+        </div>
+    </div>
+</header>
+
+<!-- === MAIN CONTENT === -->
+<main class="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- === HERO SECTION === -->
+    <section id="home" class="min-h-[calc(100vh-6rem)] flex items-center scroll-animate">
+        <div class="w-full">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4">
+                Jenson Wagner
+            </h1>
+            <h2 class="text-2xl md:text-4xl font-semibold text-primary mb-6">
+                Computer Science Student & AI Enthusiast
+            </h2>
+            <p class="max-w-3xl text-lg text-gray-600 dark:text-gray-300 mb-8">
+                Junior at Clemson University with a passion for developing intelligent systems, designing efficient algorithms, and building impactful software solutions.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="Jenson Wagner 864-354-2711 Resume - Updated-1.pdf" download class="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-hover transition-colors shadow-lg">
+                    <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download Resume
+                </a>
+                <a href="#contact" class="inline-flex items-center bg-gray-200 dark:bg-dark-card text-light-text dark:text-dark-text px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors shadow-lg">
+                    Contact Me
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- === ABOUT & SKILLS SECTION === -->
+    <section id="about" class="py-20 scroll-animate">
+        <h2 class="text-3xl font-bold mb-12 text-center">About Me</h2>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-12">
+            <div class="md:col-span-3">
+                <h3 class="text-xl font-semibold mb-4">Who I Am</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                    I'm Jenson Wagner, a computer science junior at Clemson University, expecting to graduate in May 2027. My fascination with technology began with gaming and evolved into a deep interest in artificial intelligence and its potential to solve real-world problems.
+                </p>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    My project experience, from developing AI for water treatment to co-founding a tech platform, has solidified my skills in AI agent design, algorithm optimization, and full-stack development. I am driven by a desire to learn, innovate, and contribute to teams that are pushing the boundaries of technology.
+                </p>
+            </div>
+            <div class="md:col-span-2">
+                <h3 class="text-xl font-semibold mb-4">Technical Skills</h3>
+                <div class="flex flex-wrap gap-3">
+                    <span class="skill-badge">C++</span><span class="skill-badge">Python</span>
+                    <span class="skill-badge">Java</span><span class="skill-badge">JavaScript</span>
+                    <span class="skill-badge">HTML</span><span class="skill-badge">CSS</span>
+                    <span class="skill-badge">TensorFlow</span><span class="skill-badge">PyTorch</span>
+                    <span class="skill-badge">AI Agent Design</span><span class="skill-badge">OOP</span>
+                    <span class="skill-badge">Data Structures</span><span class="skill-badge">Algorithms</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === PROJECTS SECTION === -->
+    <section id="projects" class="py-20 scroll-animate">
+        <h2 class="text-3xl font-bold mb-12 text-center">Projects</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Project 1 -->
+            <div class="project-card">
+                <h3 class="text-xl font-semibold mb-2">AI Water Chlorination Project</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">AI, LSTM, Cost Optimization</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                    Developed an LSTM network to proactively regulate chlorine in a simulated water distribution network, successfully reducing costs and safety violations compared to reactive strategies.
+                </p>
+            </div>
+            <!-- Project 2 -->
+            <div class="project-card">
+                <h3 class="text-xl font-semibold mb-2">InternAI Platform</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Full-Stack Development, AI</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                    Co-founded and developed the foundational front-end and back-end for a platform connecting students with internships through task-based assignments, currently leading AI system development.
+                </p>
+            </div>
+            <!-- Project 3 -->
+            <div class="project-card">
+                <h3 class="text-xl font-semibold mb-2">Weighted Recommendation System</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">C++, Data Structures, Algorithms</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                    Designed and implemented a C++ program to provide class recommendations for students, utilizing advanced data structures for accuracy and efficiency.
+                </p>
+            </div>
+            <!-- Project 4 -->
+            <div class="project-card">
+                <h3 class="text-xl font-semibold mb-2">Algorithmic Trading Bot</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Python, Quantitative Finance, APIs</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                    Developed a quantitative trading bot in Python, integrating financial data APIs to execute and backtest various trading strategies.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- === EXPERIENCE SECTION === -->
+    <section id="experience" class="py-20 scroll-animate">
+        <h2 class="text-3xl font-bold mb-12 text-center">Work Experience</h2>
+        <div class="relative max-w-2xl mx-auto">
+            <!-- Timeline Line -->
+            <div class="absolute left-3 top-3 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-700"></div>
+
+            <!-- Experience Item 1 -->
+            <div class="experience-item">
+                <div class="experience-dot"></div>
+                <div class="pl-10">
+                    <p class="text-sm text-primary font-semibold">May 2025 - July 2025</p>
+                    <h3 class="font-bold text-lg">AI Japanese Research - Project Leader</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Nagoya Institute of Technology</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                        Led an independent AI research project and collaborated with Master's students on optimizing a Drone Routing Program using various algorithms like Dijkstra's.
+                    </p>
+                </div>
+            </div>
+            <!-- Experience Item 2 -->
+            <div class="experience-item">
+                <div class="experience-dot"></div>
+                <div class="pl-10">
+                    <p class="text-sm text-primary font-semibold">May 2024 - August 2024</p>
+                    <h3 class="font-bold text-lg">Flooring and Decor Associate</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Home Depot</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                        Developed self-autonomy and time efficiency while learning diverse product knowledge to improve customer experience.
+                    </p>
+                </div>
+            </div>
+            <!-- Experience Item 3 -->
+            <div class="experience-item">
+                <div class="experience-dot"></div>
+                <div class="pl-10">
+                    <p class="text-sm text-primary font-semibold">July 2021 - April 2023</p>
+                    <h3 class="font-bold text-lg">Shift Leader</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Marble Slab Creamery</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                        Supervised shifts of 4-5 employees, ensuring daily operations ran smoothly and gained leadership experience in a dynamic environment.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- === CONTACT SECTION === -->
+    <section id="contact" class="py-20 scroll-animate">
+        <h2 class="text-3xl font-bold mb-4 text-center">Get In Touch</h2>
+        <p class="max-w-xl mx-auto text-center text-gray-600 dark:text-gray-300 mb-12">
+            I'm currently seeking new opportunities and am open to collaboration. Feel free to reach out.
+        </p>
+        <div class="flex justify-center items-center flex-wrap gap-8 text-center">
+            <div class="contact-info-item">
+                <div class="contact-icon-wrapper">
+                </div>
+                <h4 class="font-semibold">Email</h4>
+                <a href="mailto:jensonwagner@gmail.com" class="text-primary hover:underline">jensonwagner@gmail.com</a>
+            </div>
+            <div class="contact-info-item">
+                <div class="contact-icon-wrapper">
+                </div>
+                <h4 class="font-semibold">Phone</h4>
+                <p>864-354-2711</p>
+            </div>
+            <div class="contact-info-item">
+                <div class="contact-icon-wrapper">
+                </div>
+                <h4 class="font-semibold">LinkedIn</h4>
+                <a href="https://www.linkedin.com/in/jenson-wagner-7a72411b5/" class="text-primary hover:underline">linkedin.com/in/jenson-wagner</a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- === FOOTER === -->
+<footer class="border-t border-gray-200 dark:border-gray-800 transition-colors">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500 dark:text-gray-400">
+        <p>&copy; 2025 Jenson Wagner. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- === JAVASCRIPT LOGIC === -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- WIDGET: Live Clock ---
+        const clockElement = document.getElementById('clock');
+        function updateClock() {
+            if(clockElement) {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // --- WIDGET: Light/Dark Theme Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const lightIcon = document.getElementById('theme-icon-light');
+        const darkIcon = document.getElementById('theme-icon-dark');
+        const htmlEl = document.documentElement;
+
+        // Apply saved theme on load
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlEl.classList.add('dark');
+            darkIcon.classList.remove('hidden');
+            lightIcon.classList.add('hidden');
+        } else {
+            htmlEl.classList.remove('dark');
+            lightIcon.classList.remove('hidden');
+            darkIcon.classList.add('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            const isDark = htmlEl.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            darkIcon.classList.toggle('hidden', !isDark);
+            lightIcon.classList.toggle('hidden', isDark);
+        });
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // --- INTERACTION: Scroll Animations ---
+        const scrollElements = document.querySelectorAll('.scroll-animate');
+        const elementInView = (el, dividend = 1) => {
+            const elementTop = el.getBoundingClientRect().top;
+            return (
+                elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
+            );
+        };
+
+        const displayScrollElement = (element) => {
+            element.classList.add('visible');
+        };
+
+        const handleScrollAnimation = () => {
+            scrollElements.forEach((el) => {
+                if (elementInView(el, 1.25)) {
+                    displayScrollElement(el);
+                }
+            });
+        };
+
+        // Initial check
+        handleScrollAnimation();
+        window.addEventListener('scroll', handleScrollAnimation);
+
+        // --- Component-like styling with @apply for cleaner HTML in some cases ---
+        const style = document.createElement('style');
+        style.textContent = `
+                .skill-badge {
+                    @apply inline-block bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded-full;
+                }
+                .project-card {
+                    @apply bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-200 dark:border-gray-700;
+                }
+                .experience-item {
+                    @apply relative mb-10;
+                }
+                .experience-dot {
+                    @apply absolute left-0 top-1 w-5 h-5 bg-white dark:bg-dark-card border-4 border-primary rounded-full;
+                }
+                .contact-icon-wrapper {
+                     @apply h-12 w-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-3;
+                }
+                .contact-info-item {
+                     @apply min-w-[200px];
+                }
+            `;
+        document.head.append(style);
+    });
+</script>
+</body>
+</html>
